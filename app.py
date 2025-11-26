@@ -45,10 +45,23 @@ def analyze_sentiment(text: str):
     try:
         out = model(text[:512])
         if isinstance(out, list) and len(out) > 0:
-            return out[0]
+            raw_label = out[0]['label']  # e.g. "4 stars"
+            score = out[0]['score']
+
+            # Map stars → sentiment
+            if raw_label in ["1 star", "2 stars"]:
+                label = "NEGATIVE"
+            elif raw_label == "3 stars":
+                label = "NEUTRAL"
+            else:  # "4 stars" or "5 stars"
+                label = "POSITIVE"
+
+            return {"label": label, "score": score}
         return {"label": "NEUTRAL", "score": 0.0}
     except Exception:
         return {"label": "NEUTRAL", "score": 0.0}
+
+    
 
 def classify_news(text: str):
     text_lower = text.lower()
