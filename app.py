@@ -264,8 +264,6 @@ else:  # page == "About"
     
     **Course**: Open Source Software Lab (15B17CI575)
     
-    **Instructor**: Rohit Kumar Sony
-    
     **Semester**: Odd Semester 2025
     
     ---
