@@ -1,26 +1,24 @@
-# requirements:
-# pip install streamlit pandas plotly transformers torch
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import re
 
-# Page config must be set before other Streamlit calls
 st.set_page_config(page_title="Hindi News Analyzer", page_icon="📰", layout="wide")
 
-# Try to import transformers pipeline
+# Try importing transformers
 HAS_TRANSFORMERS = True
 try:
     from transformers import pipeline
 except Exception:
     HAS_TRANSFORMERS = False
-    st.warning("Transformers library not installed. Sentiment model will be disabled.")
+    st.warning("Transformers library not installed.")
 
+# Initialize session state to persist data
 if 'initialized' not in st.session_state:
     st.session_state.initialized = True
+    st.session_state.batch_results = None  # Store batch results
 
-st.title(" Hindi News Sentiment Analysis")
+st.title("📰 Hindi News Sentiment Analysis")
 
 CATEGORIES = ['Politics', 'Sports', 'Entertainment', 'Business', 'Technology', 'Social Issues']
 
@@ -45,7 +43,7 @@ def analyze_sentiment(text: str):
     try:
         out = model(text[:512])
         if isinstance(out, list) and len(out) > 0:
-            raw_label = out[0]['label']  # e.g. "4 stars"
+            raw_label = out[0]['label']
             score = out[0]['score']
 
             # Map stars → sentiment
@@ -60,8 +58,6 @@ def analyze_sentiment(text: str):
         return {"label": "NEUTRAL", "score": 0.0}
     except Exception:
         return {"label": "NEUTRAL", "score": 0.0}
-
-    
 
 def classify_news(text: str):
     text_lower = text.lower()
@@ -94,16 +90,19 @@ if page == "Single Analysis":
 
             st.markdown("---")
             col1, col2, col3 = st.columns(3)
+
             with col1:
                 st.subheader("Sentiment")
                 label = sentiment.get('label', 'NEUTRAL')
                 emoji = "😊" if "POS" in label.upper() else "😞" if "NEG" in label.upper() else "😐"
                 st.metric(emoji, label)
                 st.write(f"Confidence: {sentiment.get('score', 0.0):.1%}")
+
             with col2:
                 st.subheader("Category")
                 st.metric("", category['category'])
                 st.write(f"Confidence: {category['score']:.1%}")
+
             with col3:
                 st.subheader("Text Stats")
                 st.metric("Words", len(cleaned.split()))
@@ -125,15 +124,18 @@ elif page == "Batch Processing":
         if df is not None and 'text' in df.columns:
             st.write(f"Loaded {len(df)} articles")
             st.dataframe(df.head(3), use_container_width=True)
+
             if st.button(" Analyze All"):
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 results = []
+
                 for idx, row in df.iterrows():
                     text = str(row.get('text', ''))
                     cleaned = clean_text(text)
                     sentiment = analyze_sentiment(cleaned)
                     category = classify_news(cleaned)
+
                     results.append({
                         'Original Text': text[:120],
                         'Sentiment': sentiment.get('label', 'NEUTRAL'),
@@ -141,34 +143,63 @@ elif page == "Batch Processing":
                         'Category': category['category'],
                         'Category Score': f"{category['score']:.2%}"
                     })
+
                     progress_bar.progress((idx + 1) / len(df))
                     status_text.text(f"Processed {idx + 1}/{len(df)}")
-                results_df = pd.DataFrame(results)
+
+                # Save results to session state
+                st.session_state.batch_results = pd.DataFrame(results)
+                st.success("Analysis complete!")
+
+            # Display saved results
+            if st.session_state.batch_results is not None:
                 st.markdown("---")
-                st.dataframe(results_df, use_container_width=True)
-                csv = results_df.to_csv(index=False)
-                st.download_button("📥 Download Results as CSV", csv, "results.csv", "text/csv")
+                st.subheader("Results")
+                st.dataframe(st.session_state.batch_results, use_container_width=True)
+
+                csv = st.session_state.batch_results.to_csv(index=False)
+                st.download_button(" Download Results as CSV", csv, "results.csv", "text/csv", use_container_width=True)
 
 # ---------------- DASHBOARD ----------------
 elif page == "Dashboard":
     st.header("Analytics Dashboard")
-    st.info("📊 Upload a CSV in 'Batch Processing' first to see live analytics")
-    demo_data = {
-        'Sentiment': ['POSITIVE', 'POSITIVE', 'NEGATIVE', 'NEUTRAL', 'POSITIVE', 'NEGATIVE'],
-        'Category': ['Politics', 'Sports', 'Politics', 'Entertainment', 'Business', 'Technology']
-    }
-    demo_df = pd.DataFrame(demo_data)
-    col1, col2 = st.columns(2)
-    with col1:
-        sentiment_counts = demo_df['Sentiment'].value_counts()
-        fig1 = px.pie(values=sentiment_counts.values, names=sentiment_counts.index, title="Sentiment Distribution",
-                      color_discrete_map={'POSITIVE': '#2ecc71', 'NEGATIVE': '#e74c3c', 'NEUTRAL': '#95a5a6'})
-        st.plotly_chart(fig1, use_container_width=True)
-    with col2:
-        category_counts = demo_df['Category'].value_counts()
-        fig2 = px.bar(x=category_counts.index, y=category_counts.values, title="Category Distribution",
-                      labels={'x': 'Category', 'y': 'Count'})
-        st.plotly_chart(fig2, use_container_width=True)
+    if st.session_state.batch_results is not None:
+        results_df = st.session_state.batch_results
+
+        sentiments = results_df['Sentiment'].value_counts()
+        categories = results_df['Category'].value_counts()
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            fig1 = px.pie(
+                values=sentiments.values,
+                names=sentiments.index,
+                title="Sentiment Distribution",
+                color_discrete_map={'POSITIVE': '#2ecc71', 'NEGATIVE': '#e74c3c', 'NEUTRAL': '#95a5a6'}
+            )
+            st.plotly_chart(fig1, use_container_width=True)
+
+        with col2:
+            fig2 = px.bar(
+                x=categories.index,
+                y=categories.values,
+                title="Category Distribution",
+                labels={'x': 'Category', 'y': 'Count'}
+            )
+            st.plotly_chart(fig2, use_container_width=True)
+
+        st.markdown("---")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Articles", len(results_df))
+        with col2:
+            st.metric("Positive", len(results_df[results_df['Sentiment'] == 'POSITIVE']))
+        with col3:
+            st.metric("Negative", len(results_df[results_df['Sentiment'] == 'NEGATIVE']))
+    else:
+        st.info(" Upload CSV and analyze in 'Batch Processing' to see results here")
+
 
 # ---------------- ABOUT ----------------
 else:  # About
