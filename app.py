@@ -17,7 +17,7 @@ st.title("Hindi News Sentiment Analysis")
 @st.cache_resource
 def load_sentiment_model():
     return pipeline(
-        "sentiment-classification",
+        "text-classification",
         model="nlptown/bert-base-multilingual-uncased-sentiment"
     )
 
@@ -195,3 +195,91 @@ elif page == "Dashboard":
 
 st.markdown("---")
 st.markdown("<center><small>Hindi News Sentiment Analysis | Open Source Lab</small></center>", unsafe_allow_html=True)
+# ============ ABOUT PAGE ============
+elif page == "About":
+    st.header("About This Project")
+    
+    st.markdown("""
+    ### 📰 Hindi News Sentiment Analysis & Classification System
+    
+    **What is This?**
+    
+    This system analyzes Hindi news articles to determine sentiment (positive/negative/neutral) 
+    and automatically categorize them into topics like Politics, Sports, Entertainment, Business, 
+    Technology, and Social Issues.
+    
+    ---
+    
+    ### Why We Built This
+    
+    With over 600 million Hindi speakers in India, there's massive Hindi news content online. 
+    But most sentiment analysis tools only work with English. This project brings NLP to Hindi news.
+    
+    ---
+    
+    ### How It Works
+    
+    **Technology Used:**
+    - **Sentiment Analysis**: Multilingual BERT model (pre-trained)
+    - **Category Classification**: Zero-shot classification (no training needed!)
+    - **No Custom Training**: Everything is ready-to-use
+    
+    ---
+    
+    ### Key Features
+    
+    ✨ **Real-time Analysis** - Instant results with confidence scores
+    
+    ✨ **Batch Processing** - Analyze multiple articles at once
+    
+    ✨ **Analytics Dashboard** - Visual charts and trends
+    
+    ✨ **Download Results** - Export as CSV
+    
+    ---
+    
+    ### Use Cases
+    
+    - **Researchers**: Study public sentiment on topics
+    - **News Orgs**: Auto-tag and monitor articles
+    - **Content Creators**: Track article performance
+    - **Businesses**: Monitor brand sentiment in news
+    
+    ---
+    
+    ### Technical Stack
+    
+    - **Frontend**: Streamlit
+    - **Backend**: Python with Transformers
+    - **NLP Models**: BERT (sentiment), BART (classification)
+    - **Deployment**: Streamlit Cloud
+    
+    ---
+    
+    ### Team
+    
+    **Jaypee Institute of Information Technology, Noida**
+    
+    - Shreya Bhardwaj (23103122)
+    - Ronak Koul (23103126)
+    - S.M. Farhan (23103132)
+    
+    **Course**: Open Source Software Lab (15B17CI575)
+    
+    **Semester**: Odd Semester 2025
+    
+    ---
+    
+    ### Limitations
+    
+    - Works best with Devanagari script
+    - Code-mixed (Hindi+English) text may vary in accuracy
+    - 5-level sentiment classification
+    
+    ---
+    
+    Made with ❤️ for better Hindi NLP
+    """)
+
+st.markdown("---")
+st.markdown("<center><small>Hindi News Sentiment Analysis | Open Source Lab</small></center>", unsafe_allow_html=True
