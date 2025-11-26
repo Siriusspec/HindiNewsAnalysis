@@ -7,11 +7,11 @@ import re
 # Page config
 st.set_page_config(
     page_title="Hindi News Analyzer",
-    page_icon="",
+    page_icon="📰",
     layout="wide"
 )
 
-st.title(" Hindi News Sentiment Analysis")
+st.title("📰 Hindi News Sentiment Analysis")
 
 # Load models once (cached)
 @st.cache_resource
@@ -77,7 +77,7 @@ if page == "Single Analysis":
         placeholder="Enter your Hindi news..."
     )
     
-    if st.button(" Analyze", use_container_width=True):
+    if st.button("🔍 Analyze", use_container_width=True):
         if news_text.strip():
             cleaned = clean_text(news_text)
             
@@ -97,7 +97,7 @@ if page == "Single Analysis":
             
             with col2:
                 st.subheader("Category")
-                st.metric("", category['category'])
+                st.metric("📁", category['category'])
                 st.write(f"Confidence: {category['score']:.1%}")
             
             with col3:
@@ -122,7 +122,7 @@ elif page == "Batch Processing":
         st.write(f"Loaded {len(df)} articles")
         st.dataframe(df.head(3), use_container_width=True)
         
-        if st.button(" Analyze All", use_container_width=True):
+        if st.button("🚀 Analyze All", use_container_width=True):
             progress_bar = st.progress(0)
             results = []
             
@@ -150,7 +150,7 @@ elif page == "Batch Processing":
             # Download button
             csv = results_df.to_csv(index=False)
             st.download_button(
-                " Download Results as CSV",
+                "📥 Download Results as CSV",
                 csv,
                 "results.csv",
                 "text/csv",
@@ -226,13 +226,13 @@ else:  # page == "About"
     
     ### Key Features
     
-     **Real-time Analysis** - Instant results with confidence scores
+    ✨ **Real-time Analysis** - Instant results with confidence scores
     
-     **Batch Processing** - Analyze multiple articles at once
+    ✨ **Batch Processing** - Analyze multiple articles at once
     
-     **Analytics Dashboard** - Visual charts and trends
+    ✨ **Analytics Dashboard** - Visual charts and trends
     
-     **Download Results** - Export as CSV
+    ✨ **Download Results** - Export as CSV
     
     ---
     
@@ -262,7 +262,9 @@ else:  # page == "About"
     - Ronak Koul (23103126)
     - S.M. Farhan (23103132)
     
-    **Course**: Open Source Software Lab 
+    **Course**: Open Source Software Lab (15B17CI575)
+    
+    **Instructor**: Rohit Kumar Sony
     
     **Semester**: Odd Semester 2025
     
