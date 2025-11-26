@@ -225,11 +225,19 @@ and automatically categorizes them into topics like Politics, Sports, Entertainm
 ### Technical Stack
 - **Frontend**: Streamlit  
 - **Backend**: Python with Transformers  
-- **NLP Models**: BERT (sentiment), XLM-RoBERTa (zero-shot)  
+- **NLP Models**: BERT (sentiment), Keyword-based classification (rule-based)
 - **Deployment**: Streamlit Cloud  
 
 ---
 
+### Team
+
+- Shreya Bhardwaj 
+- Ronak Koul 
+- S.M. Farhan 
+
+**Course**: Open Source Software Lab 
+**Semester**: Odd Semester 2025
 Made with ❤️ for better Hindi NLP
 """)
     st.markdown("Hindi News Sentiment Analysis | Open Source Lab", unsafe_allow_html=True)
