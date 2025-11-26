@@ -210,7 +210,7 @@ else:  # About
 
 **What is This?**  
 Analyzes Hindi news articles for sentiment (positive/negative/neutral)  
-and automatically categorizes them into topics like Politics, Sports, Entertainment, Business, Technology, and Social Issues.
+and automatically categorizes them into topics like Politics, Sports, Entertainment, Business, Technology and Social Issues.
 
 ---
 
