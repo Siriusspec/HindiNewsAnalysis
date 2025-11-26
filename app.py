@@ -162,7 +162,7 @@ else:  # About
     st.header("About This Project")
     st.markdown("""
 
-📰 Hindi News Sentiment Analysis & Classification System
+ Hindi News Sentiment Analysis & Classification System
 
 **What is This?**  
 Analyzes Hindi news articles for sentiment (positive/negative/neutral)  
