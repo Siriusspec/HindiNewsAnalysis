@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
-import transformers
+import importlib
 import plotly.express as px
 import re
+
+transformers = importlib.import_module("transformers")
 
 # Page config
 st.set_page_config(
