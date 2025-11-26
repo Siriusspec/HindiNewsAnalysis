@@ -28,6 +28,6 @@ Analytics dashboard
 Download results as CSV
 
 ## How It Works
-- **Sentiment**: Uses multilingual BERT model (works with Hindi text)
-- **Classification**: Uses zero-shot classification (no training needed!)
+- **Sentiment**: Uses a multilingual BERT model (pre‑trained, works with Hindi text)
+- **Classification**: Uses keyword‑based category matching (no training required)
 - **No training required** - everything is pre-trained
