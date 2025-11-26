@@ -20,7 +20,7 @@ except Exception:
 if 'initialized' not in st.session_state:
     st.session_state.initialized = True
 
-st.title("📰 Hindi News Sentiment Analysis")
+st.title(" Hindi News Sentiment Analysis")
 
 CATEGORIES = ['Politics', 'Sports', 'Entertainment', 'Business', 'Technology', 'Social Issues']
 
@@ -72,7 +72,7 @@ page = st.sidebar.radio("Choose Mode", ["Single Analysis", "Batch Processing", "
 if page == "Single Analysis":
     st.header("Analyze Single News Article")
     news_text = st.text_area("Paste Hindi news text here:", height=150, placeholder="Enter your Hindi news...")
-    if st.button("🔍 Analyze"):
+    if st.button(" Analyze"):
         if news_text.strip():
             cleaned = clean_text(news_text)
             with st.spinner("Analyzing sentiment..."):
@@ -89,7 +89,7 @@ if page == "Single Analysis":
                 st.write(f"Confidence: {sentiment.get('score', 0.0):.1%}")
             with col2:
                 st.subheader("Category")
-                st.metric("📁", category['category'])
+                st.metric("", category['category'])
                 st.write(f"Confidence: {category['score']:.1%}")
             with col3:
                 st.subheader("Text Stats")
@@ -112,7 +112,7 @@ elif page == "Batch Processing":
         if df is not None and 'text' in df.columns:
             st.write(f"Loaded {len(df)} articles")
             st.dataframe(df.head(3), use_container_width=True)
-            if st.button("🚀 Analyze All"):
+            if st.button(" Analyze All"):
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 results = []
