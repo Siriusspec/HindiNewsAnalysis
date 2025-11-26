@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from transformers import pipeline
+import transformers
 import plotly.express as px
 import re
 
@@ -16,14 +16,14 @@ st.title("Hindi News Sentiment Analysis")
 # Load models once (cached)
 @st.cache_resource
 def load_sentiment_model():
-    return pipeline(
+    return transformers.pipeline(
         "text-classification",
         model="nlptown/bert-base-multilingual-uncased-sentiment"
     )
 
 @st.cache_resource
 def load_zero_shot_classifier():
-    return pipeline(
+    return transformers.pipeline(
         "zero-shot-classification",
         model="facebook/bart-large-mnli"
     )
@@ -44,7 +44,7 @@ def analyze_sentiment(text):
     try:
         result = sentiment_model(text[:512])
         return result[0]
-    except:
+    except Exception as e:
         return {"label": "NEUTRAL", "score": 0.0}
 
 def classify_news(text):
@@ -54,7 +54,7 @@ def classify_news(text):
             "category": result['labels'][0],
             "score": result['scores'][0]
         }
-    except:
+    except Exception as e:
         return {"category": "Unknown", "score": 0.0}
 
 # Sidebar navigation
@@ -140,7 +140,7 @@ elif page == "Batch Processing":
 
             csv = results_df.to_csv(index=False)
             st.download_button(
-                " Download Results as CSV",
+                "Download Results as CSV",
                 csv,
                 "results.csv",
                 "text/csv",
