@@ -18,7 +18,7 @@ if 'initialized' not in st.session_state:
     st.session_state.initialized = True
     st.session_state.batch_results = None  # Store batch results
 
-st.title("📰 Hindi News Sentiment Analysis")
+st.title(" Hindi News Sentiment Analysis")
 
 CATEGORIES = ['Politics', 'Sports', 'Entertainment', 'Business', 'Technology', 'Social Issues']
 
@@ -163,8 +163,8 @@ elif page == "Batch Processing":
 # ---------------- DASHBOARD ----------------
 elif page == "Dashboard":
     st.header("Analytics Dashboard")
-    if st.session_state.batch_results is not None:
-        results_df = st.session_state.batch_results
+    if st.session_state.get("batch_results") is not None:
+        results_df = st.session_state["batch_results"]
 
         sentiments = results_df['Sentiment'].value_counts()
         categories = results_df['Category'].value_counts()
