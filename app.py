@@ -236,8 +236,10 @@ and automatically categorizes them into topics like Politics, Sports, Entertainm
 - Ronak Koul 
 - S.M. Farhan 
 
-**Course**: Open Source Software Lab 
-**Semester**: Odd Semester 2025
-Made with ❤️ for better Hindi NLP
+---
+
+-**Course**: Open Source Software Lab 
+-**Semester**: Odd Semester 2025
+-Made with ❤️ for better Hindi NLP
 """)
     st.markdown("Hindi News Sentiment Analysis | Open Source Lab", unsafe_allow_html=True)
